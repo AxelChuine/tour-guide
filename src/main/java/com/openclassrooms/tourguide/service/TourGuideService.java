@@ -7,14 +7,7 @@ import com.openclassrooms.tourguide.user.UserReward;
 
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
-import java.util.Random;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -27,6 +20,7 @@ import gpsUtil.location.Attraction;
 import gpsUtil.location.Location;
 import gpsUtil.location.VisitedLocation;
 
+import org.w3c.dom.Attr;
 import tripPricer.Provider;
 import tripPricer.TripPricer;
 
@@ -95,7 +89,7 @@ public class TourGuideService {
 		return visitedLocation;
 	}
 
-	public List<Attraction> getNearByAttractions(VisitedLocation visitedLocation) {
+	/*public List<Attraction> getNearByAttractions(VisitedLocation visitedLocation) {
 		List<Attraction> nearbyAttractions = new ArrayList<>();
 		for (Attraction attraction : gpsUtil.getAttractions()) {
 			if (rewardsService.isWithinAttractionProximity(attraction, visitedLocation.location)) {
@@ -104,6 +98,43 @@ public class TourGuideService {
 		}
 
 		return nearbyAttractions;
+	}*/
+
+	public List<Attraction> getNearByAttractions(VisitedLocation visitedLocation) {
+		List<Attraction> nearbyAttractions = new ArrayList<>();
+		Map<Double, Attraction> distance = new HashMap<>();
+		for (Attraction attraction : gpsUtil.getAttractions()) {  // retrieve all attractions
+			if (rewardsService.isWithinAttractionProximity(attraction, visitedLocation.location)) { // determines if user went to the attractions
+				nearbyAttractions.add(attraction); // add to the list of nearby attractions
+			}
+			distance.put(this.rewardsService.getDistance(attraction, visitedLocation.location), attraction);
+		}
+		nearbyAttractions = Arrays.stream(filterByDistance(distance)).toList();
+		return nearbyAttractions;
+	}
+
+	public Attraction[] filterByDistance(final Map<Double, Attraction> distance) {
+		int maxLength = 5;
+		Attraction[] attractions = new Attraction[maxLength];
+		int counter = 0;
+		int length = 0;
+		double d = 1000000000.0d;
+		while ((Objects.isNull(attractions[maxLength - 1]))) {
+			for (Map.Entry<Double, Attraction> attraction : distance.entrySet()) {
+				if (length == distance.size()) {
+					counter++;
+					length = 0;
+					d = 1000000000.0d;
+				}
+				if (attraction.getKey() < d) {
+					attractions[counter] = attraction.getValue();
+					d = attraction.getKey();
+					distance.remove(attraction);
+				}
+				length++;
+			}
+		}
+		return attractions;
 	}
 
 	private void addShutDownHook() {

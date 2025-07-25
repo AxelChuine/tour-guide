@@ -1,5 +1,6 @@
 package com.openclassrooms.tourguide;
 
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.ArrayList;
@@ -45,7 +46,7 @@ public class TestPerformance {
 	 * TimeUnit.MILLISECONDS.toSeconds(stopWatch.getTime()));
 	 */
 
-	@Disabled
+	//@Disabled
 	@Test
 	public void highVolumeTrackLocation() {
 		GpsUtil gpsUtil = new GpsUtil();
@@ -71,7 +72,7 @@ public class TestPerformance {
 		assertTrue(TimeUnit.MINUTES.toSeconds(15) >= TimeUnit.MILLISECONDS.toSeconds(stopWatch.getTime()));
 	}
 
-	@Disabled
+	//@Disabled
 	@Test
 	public void highVolumeGetRewards() {
 		GpsUtil gpsUtil = new GpsUtil();
@@ -88,11 +89,14 @@ public class TestPerformance {
 		List<User> allUsers = new ArrayList<>();
 		allUsers = tourGuideService.getAllUsers();
 		allUsers.forEach(u -> u.addToVisitedLocations(new VisitedLocation(u.getUserId(), attraction, new Date())));
-
-		allUsers.forEach(u -> rewardsService.calculateRewards(u));
+		
+		// Stop the tracker before calculating rewards to avoid ConcurrentModificationException
+		tourGuideService.tracker.stopTracking();
+		
+		allUsers.forEach(rewardsService::calculateRewards);
 
 		for (User user : allUsers) {
-			assertTrue(user.getUserRewards().size() > 0);
+            assertFalse(user.getUserRewards().isEmpty());
 		}
 		stopWatch.stop();
 		tourGuideService.tracker.stopTracking();

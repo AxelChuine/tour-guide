@@ -101,41 +101,24 @@ public class TourGuideService {
 	}*/
 
 	public List<Attraction> getNearByAttractions(VisitedLocation visitedLocation) {
-		List<Attraction> nearbyAttractions = new ArrayList<>();
+		Set<Attraction> nearbyAttractions = new HashSet<>();
 		Map<Double, Attraction> distance = new HashMap<>();
-		for (Attraction attraction : gpsUtil.getAttractions()) {  // retrieve all attractions
-			if (rewardsService.isWithinAttractionProximity(attraction, visitedLocation.location)) { // determines if user went to the attractions
-				nearbyAttractions.add(attraction); // add to the list of nearby attractions
-			}
-			distance.put(this.rewardsService.getDistance(attraction, visitedLocation.location), attraction);
+		List<Double> distances = new ArrayList<>();
+		for (Attraction attraction : gpsUtil.getAttractions()) {
+			Double d = this.rewardsService.getDistance(attraction, visitedLocation.location);
+			distances.add(d);
+			distance.put(d, attraction);
 		}
-		nearbyAttractions = Arrays.stream(filterByDistance(distance)).toList();
-		return nearbyAttractions;
+		Double[] array = new Double[distances.size()];
+		array =  distances.toArray(array);
+		Arrays.sort(array);
+		Double[] distancesToRemember = Arrays.copyOf(array, 5);
+		for (Double  d : distancesToRemember) {
+			nearbyAttractions.add(distance.get(d));
+		}
+		return nearbyAttractions.stream().toList();
 	}
 
-	public Attraction[] filterByDistance(final Map<Double, Attraction> distance) {
-		int maxLength = 5;
-		Attraction[] attractions = new Attraction[maxLength];
-		int counter = 0;
-		int length = 0;
-		double d = 1000000000.0d;
-		while ((Objects.isNull(attractions[maxLength - 1]))) {
-			for (Map.Entry<Double, Attraction> attraction : distance.entrySet()) {
-				if (length == distance.size()) {
-					counter++;
-					length = 0;
-					d = 1000000000.0d;
-				}
-				if (attraction.getKey() < d) {
-					attractions[counter] = attraction.getValue();
-					d = attraction.getKey();
-					distance.remove(attraction);
-				}
-				length++;
-			}
-		}
-		return attractions;
-	}
 
 	private void addShutDownHook() {
 		Runtime.getRuntime().addShutdownHook(new Thread() {

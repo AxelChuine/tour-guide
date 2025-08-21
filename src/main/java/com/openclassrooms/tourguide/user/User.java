@@ -16,10 +16,10 @@ public class User {
 	private String phoneNumber;
 	private String emailAddress;
 	private Date latestLocationTimestamp;
-	private List<VisitedLocation> visitedLocations = new CopyOnWriteArrayList<>();
-	private List<UserReward> userRewards = new CopyOnWriteArrayList<>();
-	private UserPreferences userPreferences = new UserPreferences();
-	private List<Provider> tripDeals = new ArrayList<>();
+	private List<VisitedLocation> visitedLocations;
+	private List<UserReward> userRewards;
+	private UserPreferences userPreferences;
+	private List<Provider> tripDeals;
 
 
 	public User(UUID userId, String userName, String phoneNumber, String emailAddress) {
@@ -27,6 +27,10 @@ public class User {
 		this.userName = userName;
 		this.phoneNumber = phoneNumber;
 		this.emailAddress = emailAddress;
+        this.visitedLocations = new CopyOnWriteArrayList<>();
+        this.userRewards = new CopyOnWriteArrayList<>();
+        this.tripDeals = new ArrayList<>();
+        this.userPreferences = new UserPreferences();
 	}
 	
 	public UUID getUserId() {

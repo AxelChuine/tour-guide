@@ -1,16 +1,4 @@
 -------------------------------------------------------------------------------
 Test set: com.openclassrooms.tourguide.TestPerformance
 -------------------------------------------------------------------------------
-Tests run: 2, Failures: 0, Errors: 1, Skipped: 0, Time elapsed: 7.904 s <<< FAILURE! -- in com.openclassrooms.tourguide.TestPerformance
-com.openclassrooms.tourguide.TestPerformance.highVolumeGetRewards -- Time elapsed: 0.253 s <<< ERROR!
-java.util.ConcurrentModificationException
-	at java.base/java.util.ArrayList$Itr.checkForComodification(ArrayList.java:1013)
-	at java.base/java.util.ArrayList$Itr.next(ArrayList.java:967)
-	at com.openclassrooms.tourguide.service.RewardsService.calculateRewards(RewardsService.java:42)
-	at com.openclassrooms.tourguide.TestPerformance.lambda$highVolumeGetRewards$1(TestPerformance.java:92)
-	at java.base/java.util.ArrayList.forEach(ArrayList.java:1511)
-	at com.openclassrooms.tourguide.TestPerformance.highVolumeGetRewards(TestPerformance.java:92)
-	at java.base/java.lang.reflect.Method.invoke(Method.java:569)
-	at java.base/java.util.ArrayList.forEach(ArrayList.java:1511)
-	at java.base/java.util.ArrayList.forEach(ArrayList.java:1511)
-
+Tests run: 2, Failures: 0, Errors: 0, Skipped: 2, Time elapsed: 0.004 s -- in com.openclassrooms.tourguide.TestPerformance

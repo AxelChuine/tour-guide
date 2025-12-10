@@ -1,4 +1,6 @@
+com/openclassrooms/tourguide/service/TestTripDealService.class
 com/openclassrooms/tourguide/TourguideApplicationTests.class
+com/openclassrooms/tourguide/service/TestUserService.class
+com/openclassrooms/tourguide/service/TestGpsService.class
 com/openclassrooms/tourguide/TestPerformance.class
-com/openclassrooms/tourguide/service/TestTourGuideService.class
 com/openclassrooms/tourguide/service/TestRewardsService.class

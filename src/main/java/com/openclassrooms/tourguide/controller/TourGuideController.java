@@ -1,6 +1,7 @@
 package com.openclassrooms.tourguide.controller;
 
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 import com.openclassrooms.tourguide.service.*;
 import gpsUtil.location.Attraction;
@@ -39,7 +40,7 @@ public class TourGuideController {
     }
     
     @RequestMapping("/getLocation") 
-    public VisitedLocation getLocation(@RequestParam String userName) {
+    public VisitedLocation getLocation(@RequestParam String userName) throws ExecutionException, InterruptedException {
     	return this.gpsService.getUserLocation(getUser(userName));
     }
     
@@ -53,7 +54,7 @@ public class TourGuideController {
         // The reward points for visiting each Attraction.
         //    Note: Attraction reward points can be gathered from RewardsCentral
     @RequestMapping("/getNearbyAttractions") 
-    public List<Attraction> getNearbyAttractions(@RequestParam String userName) {
+    public List<Attraction> getNearbyAttractions(@RequestParam String userName) throws ExecutionException, InterruptedException {
     	VisitedLocation visitedLocation = this.gpsService.getUserLocation(getUser(userName));
     	return this.gpsService.getNearByAttractions(visitedLocation);
     }

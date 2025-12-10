@@ -20,82 +20,77 @@ import gpsUtil.location.VisitedLocation;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import rewardCentral.RewardCentral;
 import com.openclassrooms.tourguide.helper.InternalTestHelper;
 import com.openclassrooms.tourguide.user.User;
 import com.openclassrooms.tourguide.user.UserReward;
 
-@ExtendWith(SpringExtension.class)
+@SpringBootTest
 public class TestRewardsService {
 
-    private final ExecutorService executorService = Executors.newFixedThreadPool(10);
-
-    @InjectMocks
+    @Autowired
     private RewardsService rewardsService;
 
-    @Mock
-    private final GpsService gpsService;
+    @Autowired
+    private GpsService gpsService;
 
-    @Mock
-    private final UserService userService;
+    @Autowired
+    private UserService userService;
 
-    @Mock
+    @Autowired
     private GpsUtil gpsUtil;
 
-    public final Tracker tracker;
-
-    public TestRewardsService(GpsService gpsService, UserService userService, Tracker tracker) {
-        this.gpsService = gpsService;
-        this.userService = userService;
-        this.tracker = tracker;
-    }
 
     @Test
-	public void userGetRewards() {
-		GpsUtil gpsUtil = new GpsUtil();
-		RewardsService rewardsService = new RewardsService(gpsUtil, new RewardCentral());
-
+	public void userGetRewards() throws ExecutionException, InterruptedException {
 		InternalTestHelper.setInternalUserNumber(0);
-		TourGuideService tourGuideService = new TourGuideService(rewardsService, tracker);
 
 		User user = new User(UUID.randomUUID(), "jon", "000", "jon@tourGuide.com");
-		Attraction attraction = gpsUtil.getAttractions().get(0);
+		Attraction attraction = gpsService.getAttractions().get(0);
 		user.addToVisitedLocations(new VisitedLocation(user.getUserId(), attraction, new Date()));
-		/*tourGuideService.trackUserLocation(user);
-		List<UserReward> userRewards = user.getUserRewards();
-		tourGuideService.tracker.stopTracking();*/
-
-        try {
-            this.gpsService.trackUserLocation(user);
-            List<UserReward> userRewards = user.getUserRewards();
-            tourGuideService.tracker.stopTracking();
-            assertTrue(userRewards.size() == 1);
-        } finally {
-            executorService.shutdown();
-        }
-
+        this.gpsService.trackUserLocation(user);
+        List<UserReward> userRewards = user.getUserRewards();
+        this.userService.tracker.stopTracking();
+        assertTrue(userRewards.size() == 1);
 	}
 
 	@Test
 	public void isWithinAttractionProximity() {
-		Attraction attraction = gpsUtil.getAttractions().get(0);
+		Attraction attraction = gpsService.getAttractions().get(0);
 		assertTrue(rewardsService.isWithinAttractionProximity(attraction, attraction));
 	}
 
-	@Disabled // Needs fixed - can throw ConcurrentModificationException
+	//@Disabled // Needs fixed - can throw ConcurrentModificationException
 	@Test
-	public void nearAllAttractions() {
+	public void nearAllAttractions() throws InterruptedException {
 		rewardsService.setProximityBuffer(Integer.MAX_VALUE);
 
 		InternalTestHelper.setInternalUserNumber(1);
-		TourGuideService tourGuideService = new TourGuideService(rewardsService, tracker);
 
-		rewardsService.calculateRewards(this.userService.getAllUsers().get(0));
-		List<UserReward> userRewards = this.userService.getUserRewards(this.userService.getAllUsers().get(0));
-		tourGuideService.tracker.stopTracking();
+        List<Attraction> attractions = gpsService.getAttractions();
+        User user = this.userService.getAllUsers().get(0);
+        // Ensure there is at least one visited location so calculateRewards has input to process
+        for (Attraction attraction : attractions) {
+            user.addToVisitedLocations(new VisitedLocation(user.getUserId(), attraction, new Date()));
+        }
 
-		assertEquals(gpsUtil.getAttractions().size(), userRewards.size());
+		rewardsService.calculateRewards(user);
+
+        // Wait up to 5 seconds for asynchronous reward calculation to complete
+        int expected = attractions.size();
+        long start = System.currentTimeMillis();
+        while (user.getUserRewards().size() < expected && System.currentTimeMillis() - start < 5000) {
+            Thread.sleep(50);
+        }
+
+		List<UserReward> userRewards = this.userService.getUserRewards(user);
+		rewardsService.tracker.stopTracking();
+		userService.tracker.stopTracking();
+
+		assertEquals(attractions.size(), userRewards.size());
 	}
 
 }

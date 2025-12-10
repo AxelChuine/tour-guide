@@ -1,0 +1,19 @@
+-------------------------------------------------------------------------------
+Test set: com.openclassrooms.tourguide.service.TestGpsService
+-------------------------------------------------------------------------------
+Tests run: 3, Failures: 0, Errors: 2, Skipped: 0, Time elapsed: 3.628 s <<< FAILURE! -- in com.openclassrooms.tourguide.service.TestGpsService
+com.openclassrooms.tourguide.service.TestGpsService.trackUser -- Time elapsed: 0.011 s <<< ERROR!
+java.lang.NullPointerException: Cannot read field "userId" because "visitedLocation" is null
+	at com.openclassrooms.tourguide.service.TestGpsService.trackUser(TestGpsService.java:49)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:569)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1511)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1511)
+
+com.openclassrooms.tourguide.service.TestGpsService.getNearbyAttractions -- Time elapsed: 0.021 s <<< ERROR!
+java.lang.NullPointerException: Cannot read field "location" because "visitedLocation" is null
+	at com.openclassrooms.tourguide.service.GpsService.getNearByAttractions(GpsService.java:69)
+	at com.openclassrooms.tourguide.service.TestGpsService.getNearbyAttractions(TestGpsService.java:56)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:569)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1511)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1511)
+

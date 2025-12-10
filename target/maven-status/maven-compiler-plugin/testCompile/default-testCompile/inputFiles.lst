@@ -1,4 +1,6 @@
 /home/axel/developpeur/openclassrooms/java/TourGuide/src/test/java/com/openclassrooms/tourguide/TestPerformance.java
 /home/axel/developpeur/openclassrooms/java/TourGuide/src/test/java/com/openclassrooms/tourguide/TourguideApplicationTests.java
+/home/axel/developpeur/openclassrooms/java/TourGuide/src/test/java/com/openclassrooms/tourguide/service/TestGpsService.java
 /home/axel/developpeur/openclassrooms/java/TourGuide/src/test/java/com/openclassrooms/tourguide/service/TestRewardsService.java
-/home/axel/developpeur/openclassrooms/java/TourGuide/src/test/java/com/openclassrooms/tourguide/service/TestTourGuideService.java
+/home/axel/developpeur/openclassrooms/java/TourGuide/src/test/java/com/openclassrooms/tourguide/service/TestTripDealService.java
+/home/axel/developpeur/openclassrooms/java/TourGuide/src/test/java/com/openclassrooms/tourguide/service/TestUserService.java

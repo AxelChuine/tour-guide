@@ -14,15 +14,15 @@ public class TourGuideModule {
 	public GpsUtil getGpsUtil() {
 		return new GpsUtil();
 	}
-	
+
 	@Bean
 	public RewardsService getRewardsService() {
 		return new RewardsService(getGpsUtil(), getRewardCentral());
 	}
-	
+
 	@Bean
 	public RewardCentral getRewardCentral() {
 		return new RewardCentral();
 	}
-	
+
 }

@@ -1,7 +1,9 @@
 package com.openclassrooms.tourguide.service;
 
+import com.openclassrooms.tourguide.tracker.Tracker;
 import com.openclassrooms.tourguide.user.User;
 import com.openclassrooms.tourguide.user.UserReward;
+import com.openclassrooms.tourguide.utils.TourGuideUtils;
 import gpsUtil.location.VisitedLocation;
 import org.springframework.stereotype.Service;
 
@@ -22,11 +24,14 @@ public class UserService {
 
     private final RewardsService rewardsService;
 
-    private final Map<String, User> internalUserMap = new HashMap<>();
+    private final TourGuideUtils utils;
 
-    public UserService(GpsService gpsService, RewardsService rewardsService) {
+    public Tracker tracker = new Tracker();
+
+    public UserService(GpsService gpsService, RewardsService rewardsService, TourGuideUtils utils) {
         this.gpsService = gpsService;
         this.rewardsService = rewardsService;
+        this.utils = utils;
     }
 
 
@@ -35,16 +40,16 @@ public class UserService {
     }
 
     public User getUser(String userName) {
-        return internalUserMap.get(userName);
+        return this.utils.internalUserMap.get(userName);
     }
 
     public List<User> getAllUsers() {
-        return new ArrayList<>(internalUserMap.values());
+        return new ArrayList<>(this.utils.internalUserMap.values());
     }
 
     public void addUser(User user) {
-        if (!internalUserMap.containsKey(user.getUserName())) {
-            internalUserMap.put(user.getUserName(), user);
+        if (!this.utils.internalUserMap.containsKey(user.getUserName())) {
+            this.utils.internalUserMap.put(user.getUserName(), user);
         }
     }
 

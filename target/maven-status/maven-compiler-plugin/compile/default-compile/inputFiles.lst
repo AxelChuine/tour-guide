@@ -2,9 +2,12 @@
 /home/axel/developpeur/openclassrooms/java/TourGuide/src/main/java/com/openclassrooms/tourguide/controller/TourGuideController.java
 /home/axel/developpeur/openclassrooms/java/TourGuide/src/main/java/com/openclassrooms/tourguide/controller/TourGuideModule.java
 /home/axel/developpeur/openclassrooms/java/TourGuide/src/main/java/com/openclassrooms/tourguide/helper/InternalTestHelper.java
+/home/axel/developpeur/openclassrooms/java/TourGuide/src/main/java/com/openclassrooms/tourguide/service/GpsService.java
 /home/axel/developpeur/openclassrooms/java/TourGuide/src/main/java/com/openclassrooms/tourguide/service/RewardsService.java
-/home/axel/developpeur/openclassrooms/java/TourGuide/src/main/java/com/openclassrooms/tourguide/service/TourGuideService.java
+/home/axel/developpeur/openclassrooms/java/TourGuide/src/main/java/com/openclassrooms/tourguide/service/TripDealService.java
+/home/axel/developpeur/openclassrooms/java/TourGuide/src/main/java/com/openclassrooms/tourguide/service/UserService.java
 /home/axel/developpeur/openclassrooms/java/TourGuide/src/main/java/com/openclassrooms/tourguide/tracker/Tracker.java
 /home/axel/developpeur/openclassrooms/java/TourGuide/src/main/java/com/openclassrooms/tourguide/user/User.java
 /home/axel/developpeur/openclassrooms/java/TourGuide/src/main/java/com/openclassrooms/tourguide/user/UserPreferences.java
 /home/axel/developpeur/openclassrooms/java/TourGuide/src/main/java/com/openclassrooms/tourguide/user/UserReward.java
+/home/axel/developpeur/openclassrooms/java/TourGuide/src/main/java/com/openclassrooms/tourguide/utils/TourGuideUtils.java

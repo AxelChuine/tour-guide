@@ -28,16 +28,15 @@ public class TourGuideUtils {
 
     private Logger logger = LoggerFactory.getLogger(TourGuideUtils.class);
 
-
     private final GpsService gpsService;
 
     private final ExecutorService executorService = Executors.newFixedThreadPool(1000);
     private final RewardsService rewardsService;
     private final TripPricer tripPricer = new TripPricer();
     public final Tracker tracker;
-    boolean testMode = true;
 
-    private Map<String, User> internalUserMap = new HashMap<>();
+    public Map<String, User> internalUserMap = new HashMap<>();
+    private List<User> users;
 
     public TourGuideUtils(GpsService gpsService, RewardsService rewardsService, Tracker tracker) {
         this.gpsService = gpsService;
@@ -64,7 +63,8 @@ public class TourGuideUtils {
             String email = userName + "@tourGuide.com";
             User user = new User(UUID.randomUUID(), userName, phone, email);
             this.gpsService.generateUserLocationHistory(user);
-
+            this.users = new ArrayList<>();
+            this.users.add(user);
             internalUserMap.put(userName, user);
         });
         logger.debug("Created " + InternalTestHelper.getInternalUserNumber() + " internal test users.");
@@ -81,24 +81,9 @@ public class TourGuideUtils {
     private void generateUserLocationHistory(User user) {
         IntStream.range(0, 3).forEach(i -> {
             user.addToVisitedLocations(new VisitedLocation(user.getUserId(),
-                    new Location(generateRandomLatitude(), generateRandomLongitude()), getRandomTime()));
+                    new Location(this.gpsService.generateRandomLatitude(), this.gpsService.generateRandomLongitude()), this.gpsService.getRandomTime()));
         });
     }
 
-    private double generateRandomLongitude() {
-        double leftLimit = -180;
-        double rightLimit = 180;
-        return leftLimit + new Random().nextDouble() * (rightLimit - leftLimit);
-    }
 
-    private double generateRandomLatitude() {
-        double leftLimit = -85.05112878;
-        double rightLimit = 85.05112878;
-        return leftLimit + new Random().nextDouble() * (rightLimit - leftLimit);
-    }
-
-    private Date getRandomTime() {
-        LocalDateTime localDateTime = LocalDateTime.now().minusDays(new Random().nextInt(30));
-        return Date.from(localDateTime.toInstant(ZoneOffset.UTC));
-    }
 }

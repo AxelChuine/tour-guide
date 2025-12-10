@@ -1,8 +1,21 @@
 -------------------------------------------------------------------------------
 Test set: com.openclassrooms.tourguide.service.TestRewardsService
 -------------------------------------------------------------------------------
-Tests run: 3, Failures: 1, Errors: 0, Skipped: 1, Time elapsed: 0.258 s <<< FAILURE! -- in com.openclassrooms.tourguide.service.TestRewardsService
-com.openclassrooms.tourguide.service.TestRewardsService.userGetRewards -- Time elapsed: 0.205 s <<< FAILURE!
+Tests run: 3, Failures: 2, Errors: 0, Skipped: 0, Time elapsed: 9.784 s <<< FAILURE! -- in com.openclassrooms.tourguide.service.TestRewardsService
+com.openclassrooms.tourguide.service.TestRewardsService.nearAllAttractions -- Time elapsed: 5.711 s <<< FAILURE!
+org.opentest4j.AssertionFailedError: expected: <26> but was: <10>
+	at org.junit.jupiter.api.AssertionFailureBuilder.build(AssertionFailureBuilder.java:151)
+	at org.junit.jupiter.api.AssertionFailureBuilder.buildAndThrow(AssertionFailureBuilder.java:132)
+	at org.junit.jupiter.api.AssertEquals.failNotEqual(AssertEquals.java:197)
+	at org.junit.jupiter.api.AssertEquals.assertEquals(AssertEquals.java:150)
+	at org.junit.jupiter.api.AssertEquals.assertEquals(AssertEquals.java:145)
+	at org.junit.jupiter.api.Assertions.assertEquals(Assertions.java:531)
+	at com.openclassrooms.tourguide.service.TestRewardsService.nearAllAttractions(TestRewardsService.java:92)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:569)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1511)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1511)
+
+com.openclassrooms.tourguide.service.TestRewardsService.userGetRewards -- Time elapsed: 0.015 s <<< FAILURE!
 org.opentest4j.AssertionFailedError: expected: <true> but was: <false>
 	at org.junit.jupiter.api.AssertionFailureBuilder.build(AssertionFailureBuilder.java:151)
 	at org.junit.jupiter.api.AssertionFailureBuilder.buildAndThrow(AssertionFailureBuilder.java:132)
@@ -10,7 +23,7 @@ org.opentest4j.AssertionFailedError: expected: <true> but was: <false>
 	at org.junit.jupiter.api.AssertTrue.assertTrue(AssertTrue.java:36)
 	at org.junit.jupiter.api.AssertTrue.assertTrue(AssertTrue.java:31)
 	at org.junit.jupiter.api.Assertions.assertTrue(Assertions.java:183)
-	at com.openclassrooms.tourguide.service.TestRewardsService.userGetRewards(TestRewardsService.java:37)
+	at com.openclassrooms.tourguide.service.TestRewardsService.userGetRewards(TestRewardsService.java:57)
 	at java.base/java.lang.reflect.Method.invoke(Method.java:569)
 	at java.base/java.util.ArrayList.forEach(ArrayList.java:1511)
 	at java.base/java.util.ArrayList.forEach(ArrayList.java:1511)

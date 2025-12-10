@@ -1,7 +1,12 @@
 package com.openclassrooms.tourguide.service;
 
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
+import com.openclassrooms.tourguide.tracker.Tracker;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import gpsUtil.GpsUtil;
@@ -19,12 +24,16 @@ public class RewardsService {
 	// proximity in miles
     private final int defaultProximityBuffer = 10;
 	private int proximityBuffer = defaultProximityBuffer;
+    /*private final GpsService gpsService;*/
     private final GpsUtil gpsUtil;
 	private final RewardCentral rewardsCentral;
-	
+	final Tracker tracker = new Tracker();
+
+    private final ExecutorService executorService = Executors.newFixedThreadPool(1000);
+
 	public RewardsService(GpsUtil gpsUtil, RewardCentral rewardCentral) {
-		this.gpsUtil = gpsUtil;
-		this.rewardsCentral = rewardCentral;
+        this.gpsUtil = gpsUtil;
+        this.rewardsCentral = rewardCentral;
 	}
 	
 	public void setProximityBuffer(int proximityBuffer) {
@@ -34,21 +43,23 @@ public class RewardsService {
 	public void setDefaultProximityBuffer() {
 		proximityBuffer = defaultProximityBuffer;
 	}
-	
+
+    @Async
 	public void calculateRewards(User user) {
-		List<VisitedLocation> userLocations = user.getVisitedLocations();
-		List<Attraction> attractions = gpsUtil.getAttractions();
-		
-		for(VisitedLocation visitedLocation : userLocations) {
-			for(Attraction attraction : attractions) {
-				if(user.getUserRewards().stream().noneMatch(r -> r.attraction.attractionName.equals(attraction.attractionName))) {
-					if(nearAttraction(visitedLocation, attraction)) {
-						user.addUserReward(new UserReward(visitedLocation, attraction, getRewardPoints(attraction, user)));
-					}
-				}
-			}
-		}
-	}
+        this.executorService.submit(() -> {
+            List<VisitedLocation> userLocations = user.getVisitedLocations();
+            List<Attraction> attractions = gpsUtil.getAttractions();
+            for(VisitedLocation visitedLocation : userLocations) {
+                for(Attraction attraction : attractions) {
+                    if(user.getUserRewards().stream().noneMatch(r -> r.attraction.attractionName.equals(attraction.attractionName))) {
+                        if(nearAttraction(visitedLocation, attraction)) {
+                            user.addUserReward(new UserReward(visitedLocation, attraction, getRewardPoints(attraction, user)));
+                        }
+                    }
+                }
+            }
+        });
+    }
 	
 	public boolean isWithinAttractionProximity(Attraction attraction, Location location) {
         int attractionProximityRange = 200;
